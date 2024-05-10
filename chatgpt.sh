@@ -11,6 +11,7 @@ COMMAND_GENERATION_PROMPT="You are a Command Line Interface expert and your task
 CHATGPT_CYAN_LABEL="\033[36mchatgpt \033[0m"
 PROCESSING_LABEL="\n\033[90mProcessing... \033[0m\033[0K\r"
 OVERWRITE_PROCESSING_LINE="             \033[0K\r"
+COLUMNS=80
 
 if [[ -z "$OPENAI_KEY" ]]; then
 	echo "You need to set your OPENAI_KEY to use this script"
@@ -45,6 +46,8 @@ Options:
   --prompt-from-file         Provide prompt from file
 
   -b, --big-prompt           Allow multi-line prompts during chat mode
+
+  -x, --exec                 Prompt with command instead of starting chat
 
   -t, --temperature          Temperature
 
@@ -234,6 +237,11 @@ while [[ "$#" -gt 0 ]]; do
 		shift
 		shift
 		;;
+	-x | --exec)
+		prompt="command: $2"
+		shift
+		shift
+		;;    
 	--prompt-from-file)
 		prompt=$(cat "$2")
 		shift
@@ -285,7 +293,7 @@ done
 # set defaults
 TEMPERATURE=${TEMPERATURE:-0.7}
 MAX_TOKENS=${MAX_TOKENS:-1024}
-MODEL=${MODEL:-gpt-3.5-turbo}
+MODEL=${MODEL:-gpt-4}
 SIZE=${SIZE:-512x512}
 CONTEXT=${CONTEXT:-false}
 MULTI_LINE_PROMPT=${MULTI_LINE_PROMPT:-false}
